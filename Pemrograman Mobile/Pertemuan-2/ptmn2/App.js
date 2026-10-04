@@ -1,6 +1,8 @@
-// Import Library
+// ==================================================
+// IMPORT LIBRARY
+// ==================================================
 
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 
 import {
   View,
@@ -17,16 +19,17 @@ import {
   Modal,
   ActivityIndicator,
   StatusBar,
+  SafeAreaView,
   StyleSheet,
   Alert,
   Platform,
   KeyboardAvoidingView,
-  Animated
+  Animated,
 } from 'react-native';
-
 
 // ==================================================
 // DATA PROFILE
+// POIN 1 - Ganti data profil dengan data pribadi
 // ==================================================
 
 const PROFILE = {
@@ -35,17 +38,18 @@ const PROFILE = {
   email: 'faridilham0302@gmail.com',
   phone: '083156623352',
   location: 'Subang, Jawa Barat',
-  bio: 'Mahasiswa Informatika UINSSC',
+  bio: 'Mahasiswa Informatika UINSSC yang tertarik pada teknologi, aplikasi mobile, dan pengembangan sistem.',
   avatar: '',
-  avatarOffline: './assets/foto gw.jpeg'
+  avatarOffline: require('./assets/foto gw.jpeg'),
 };
-
 
 // ==================================================
 // DATA SKILLS
+// POIN 2 - Minimal 3 skill baru dengan warna berbeda
 // ==================================================
 
 const SKILLS = [
+  // Skill dari kode asli
   { id: '1', name: 'React Native', level: 90, color: '#61DAFB' },
   { id: '2', name: 'Flutter', level: 75, color: '#02569B' },
   { id: '3', name: 'JavaScript', level: 88, color: '#F7DF1E' },
@@ -53,15 +57,15 @@ const SKILLS = [
   { id: '5', name: 'Node.js', level: 70, color: '#339933' },
   { id: '6', name: 'Firebase', level: 82, color: '#FFCA28' },
 
-  // 3 SKILL BARU SESUAI TUGAS
-  { id: '7', name: 'HTML & CSS', level: 85, color: '#E44D26' },
-  { id: '8', name: 'PHP', level: 70, color: '#777BB4' },
-  { id: '9', name: 'MySQL', level: 75, color: '#00758F' },
+  // 3 skill tambahan untuk tugas
+  { id: '7', name: 'Python', level: 75, color: '#3776AB' },
+  { id: '8', name: 'C++', level: 70, color: '#00599C' },
+  { id: '9', name: 'UI/UX Design', level: 78, color: '#FF61F6' },
 ];
-
 
 // ==================================================
 // DATA PENGALAMAN & PENDIDIKAN
+// POIN 3 - Tambah pengalaman organisasi dan pendidikan
 // ==================================================
 
 const SECTIONS = [
@@ -70,102 +74,102 @@ const SECTIONS = [
     data: [
       {
         id: 'e1',
-        role: 'Head of Creative Economy',
-        company: 'HIMAFOR UIN Siber Syekh Nurjati Cirebon',
+        role: 'Kepala Departemen Creative Economy',
+        company: 'HIMAFOR - Himpunan Mahasiswa Informatika',
         period: '2026 – Sekarang',
-        desc: 'Bertanggung jawab dalam perencanaan kegiatan ekonomi kreatif, penjualan produk, serta mencari peluang kerja sama dan sponsor untuk kegiatan organisasi.'
+        desc: 'Bertanggung jawab dalam perencanaan kegiatan ekonomi kreatif, penjualan produk, serta mencari peluang kerja sama dan sponsor untuk kegiatan organisasi.',
       },
       {
         id: 'e2',
-        role: 'Mahasiswa Informatika',
-        company: 'Proyek Perkuliahan',
-        period: '2024 – Sekarang',
-        desc: 'Mengerjakan berbagai proyek perkuliahan seperti pengembangan aplikasi mobile, website, basis data, dan proyek teknologi informasi lainnya.'
+        role: 'Anggota Himpunan Mahasiswa Informatika',
+        company: 'HIMAFOR',
+        period: '2025 – Sekarang',
+        desc: 'Berpartisipasi dalam kegiatan dan program kerja organisasi serta membantu pelaksanaan berbagai kegiatan mahasiswa Informatika.',
       },
     ],
   },
-
   {
     title: '🎓 Pendidikan',
     data: [
       {
         id: 'd1',
         role: 'S1 Informatika',
-        company: 'UIN Siber Syekh Nurjati Cirebon',
+        company: 'Universitas Islam Negeri Siber Syekh Nurjati Cirebon',
         period: '2024 – Sekarang',
-        desc: 'Mempelajari pemrograman, basis data, pengembangan aplikasi, jaringan komputer, serta berbagai teknologi informasi.'
+        desc: 'Mahasiswa Program Studi Informatika yang mempelajari pemrograman, pengembangan aplikasi, basis data, jaringan, dan teknologi informasi.',
       },
       {
         id: 'd2',
-        role: 'Pendidikan Menengah',
-        company: 'Sekolah Menengah',
+        role: 'Sekolah Menengah Atas',
+        company: 'Pendidikan Menengah',
         period: 'Sebelum 2024',
-        desc: 'Menyelesaikan pendidikan menengah sebelum melanjutkan pendidikan ke Program Studi Informatika.'
+        desc: 'Menyelesaikan pendidikan menengah sebelum melanjutkan pendidikan ke Program Studi Informatika.',
       },
     ],
   },
 ];
-
 
 // ==================================================
 // DATA SOSIAL MEDIA
 // ==================================================
 
 const SOCIAL = [
-  { id: 's1', label: 'GitHub', icon: '🧑‍💻', url: 'https://github.com/Rith32-ig' },
-  { id: 's2', label: 'LinkedIn', icon: '💼', url: 'linkedin.com/in/fulan' },
-  { id: 's3', label: 'Portfolio', icon: '🌐', url: 'fulan.dev' },
+  {
+    id: 's1',
+    label: 'GitHub',
+    icon: '🧑‍💻',
+    url: 'github.com/fulan',
+  },
+  {
+    id: 's2',
+    label: 'LinkedIn',
+    icon: '💼',
+    url: 'linkedin.com/in/fulan',
+  },
+  {
+    id: 's3',
+    label: 'Portfolio',
+    icon: '🌐',
+    url: 'fulan.dev',
+  },
 ];
-
 
 // ==================================================
 // SUB-COMPONENT: SkillCard
-// Dipakai oleh FlatList untuk render tiap skill
-// Props: item -> { name, level, color }
+// Dipakai oleh FlatList
 // ==================================================
 
 const SkillCard = ({ item }) => (
-  // View -> container kartu
   <View style={styles.skillCard}>
 
     {/* Baris atas: nama + persentase */}
     <View style={styles.skillHeader}>
-
       {/* Text -> nama skill */}
       <Text style={styles.skillName}>
         {item.name}
       </Text>
-
       <Text style={styles.skillPercent}>
         {item.level}%
       </Text>
-
     </View>
-
-
     {/* Progress bar */}
     <View style={styles.progressBg}>
-
       <View
         style={[
           styles.progressFill,
           {
             width: `${item.level}%`,
-            backgroundColor: item.color
-          }
+            backgroundColor: item.color,
+          },
         ]}
       />
-
     </View>
-
   </View>
 );
-
 
 // ==================================================
 // SUB-COMPONENT: TimelineCard
 // Dipakai oleh SectionList
-// Props: item -> { role, company, period }, onPress
 // ==================================================
 
 const TimelineCard = ({ item, onPress }) => (
@@ -174,26 +178,19 @@ const TimelineCard = ({ item, onPress }) => (
     onPress={() => onPress(item)}
     activeOpacity={0.75}
   >
-
     {/* Titik timeline */}
     <View style={styles.timelineDot} />
-
-
     {/* Konten teks */}
     <View style={styles.timelineContent}>
-
       <Text style={styles.timelineRole}>
         {item.role}
       </Text>
-
       <Text style={styles.timelineCompany}>
         {item.company}
       </Text>
-
       <Text style={styles.timelinePeriod}>
         {item.period}
       </Text>
-
       <Text style={styles.timelineHint}>
         Ketuk untuk detail →
       </Text>
@@ -203,7 +200,6 @@ const TimelineCard = ({ item, onPress }) => (
   </TouchableOpacity>
 );
 
-
 // ==================================================
 // APP
 // ==================================================
@@ -211,68 +207,70 @@ const TimelineCard = ({ item, onPress }) => (
 export default function App() {
 
   // ==================================================
-  // STATE
+  // STATE DARI KODE ASLI
   // ==================================================
 
-  // Switch: apakah user Open to Work?
+  // 11. Switch -> apakah Open to Work
   const [openToWork, setOpenToWork] = useState(true);
 
-
-  // Modal
+  // 12. Modal
   const [selectedItem, setSelectedItem] = useState(null);
   const [modalVisible, setModalVisible] = useState(false);
 
-
-  // TextInput
+  // 7. TextInput
   const [senderName, setSenderName] = useState('');
   const [message, setMessage] = useState('');
 
-
-  // ActivityIndicator
+  // 13. ActivityIndicator
   const [sending, setSending] = useState(false);
 
-
-  // Pressable
+  // 10. Pressable
   const [pressing, setPressing] = useState(false);
 
-
   // ==================================================
-  // STATE TAB NAVIGASI
+  // TAMBAHAN TUGAS PENGEMBANGAN
   // ==================================================
 
+  // POIN 5 - Tab navigasi sederhana
   const [activeTab, setActiveTab] = useState('Info');
 
+  // POIN 6 - Animated API
+  const avatarScale = useRef(new Animated.Value(1)).current;
 
   // ==================================================
-  // ANIMATED API
+  // POIN 6 - ANIMASI FOTO PROFILE
   // ==================================================
 
-  const avatarScale = useRef(
-    new Animated.Value(0.7)
-  ).current;
-
-
-  // Animasi avatar saat aplikasi dibuka
   useEffect(() => {
 
-    Animated.spring(
-      avatarScale,
-      {
-        toValue: 1,
-        friction: 5,
-        tension: 40,
-        useNativeDriver: true
-      }
-    ).start();
+    const animation = Animated.loop(
+      Animated.sequence([
+        Animated.timing(avatarScale, {
+          toValue: 1.08,
+          duration: 800,
+          useNativeDriver: true,
+        }),
 
-  }, []);
+        Animated.timing(avatarScale, {
+          toValue: 1,
+          duration: 800,
+          useNativeDriver: true,
+        }),
+      ])
+    );
 
+    animation.start();
+
+    return () => {
+      animation.stop();
+    };
+
+  }, [avatarScale]);
 
   // ==================================================
-  // HANDLER FUNCTIONS
+  // HANDLER MODAL
   // ==================================================
 
-  // Dipanggil saat kartu timeline ditekan
   const handleCardPress = (item) => {
 
     setSelectedItem(item);
@@ -281,8 +279,10 @@ export default function App() {
 
   };
 
+  // ==================================================
+  // HANDLER KIRIM PESAN
+  // ==================================================
 
-  // Dipanggil saat tombol Kirim Pesan ditekan
   const handleSend = () => {
 
     // Validasi input
@@ -296,576 +296,635 @@ export default function App() {
       return;
     }
 
-
+    // Tampilkan loading
     setSending(true);
 
-
-    // Simulasi delay 2 detik
+    // Simulasi proses kirim
     setTimeout(() => {
-
-      const namaPengirim = senderName;
 
       setSending(false);
 
+      const currentName = senderName;
+
       setSenderName('');
-
       setMessage('');
-
 
       Alert.alert(
         '✅ Berhasil',
-        `Pesan dari ${namaPengirim} telah terkirim!`
+        `Pesan dari ${currentName} telah terkirim!`
       );
 
     }, 2000);
+
   };
 
-
   // ==================================================
-  // RETURN
+  // RENDER
   // ==================================================
 
   return (
 
-    <View style={styles.container}>
+    // ==================================================
+    // POIN 4 - KeyboardAvoidingView
+    // Form tidak tertutup keyboard
+    // ==================================================
 
-      <StatusBar
-        barStyle="light-content"
-        backgroundColor="#2563EB"
-      />
+    <KeyboardAvoidingView
+      style={styles.keyboardContainer}
+      behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+    >
 
+      {/* ==================================================
+          POIN 15 - SafeAreaView
+          Area aman dari notch dan home bar
+      ================================================== */}
 
-      <ScrollView
-        showsVerticalScrollIndicator={false}
-      >
-
+      <SafeAreaView style={styles.safeArea}>
 
         {/* ==================================================
-            HEADER PROFILE
+            POIN 14 - StatusBar
         ================================================== */}
 
-        <View style={styles.header}>
+        <StatusBar
+          backgroundColor="#1a1a2e"
+          barStyle="light-content"
+        />
 
+        {/* ==================================================
+            HEADER BAR
+        ================================================== */}
 
-          {/* ==================================================
-              ANIMASI AVATAR
-          ================================================== */}
+        <View style={styles.headerBar}>
 
-          <Animated.View
-            style={[
-              styles.photoContainer,
-              {
-                transform: [
-                  {
-                    scale: avatarScale
-                  }
-                ]
-              }
-            ]}
-          >
-
-            <Image
-              source={require('./assets/foto gw.jpeg')}
-              style={styles.photo}
-            />
-
-          </Animated.View>
-
-
-          <Text style={styles.name}>
-            {PROFILE.name}
+          <Text style={styles.headerTitle}>
+            📄 Curriculum Vitae
           </Text>
 
+          {/* Toggle Open to Work */}
 
-          <Text style={styles.title}>
-            {PROFILE.title}
-          </Text>
+          <View style={styles.switchRow}>
 
-
-          <Text style={styles.university}>
-            UIN Siber Syekh Nurjati Cirebon
-          </Text>
-
-
-          <Text style={styles.bio}>
-            {PROFILE.bio}
-          </Text>
-
-
-          {/* ==================================================
-              OPEN TO WORK
-          ================================================== */}
-
-          <View style={styles.workContainer}>
-
-            <Text style={styles.workText}>
-
-              {openToWork
-                ? '🟢 Open to Work'
-                : '⚪ Tidak tersedia'}
-
+            <Text style={styles.switchLabel}>
+              {openToWork ? '🟢 Open' : '🔴 Busy'}
             </Text>
 
+            {/* 11. Switch */}
 
             <Switch
               value={openToWork}
               onValueChange={setOpenToWork}
+              trackColor={{
+                false: '#555',
+                true: '#4ade80',
+              }}
+              thumbColor={
+                openToWork ? '#fff' : '#aaa'
+              }
             />
 
           </View>
 
         </View>
 
-
         {/* ==================================================
-            TAB NAVIGASI
+            POIN 5 - TAB NAVIGASI
+            Info / Skills / Kontak
+            Menggunakan TouchableOpacity
         ================================================== */}
 
         <View style={styles.tabContainer}>
 
-
-          {/* TAB INFO */}
-
           <TouchableOpacity
             style={[
               styles.tabButton,
-              activeTab === 'Info' &&
-              styles.activeTab
+              activeTab === 'Info' && styles.tabButtonActive,
             ]}
             onPress={() => setActiveTab('Info')}
+            activeOpacity={0.8}
           >
 
             <Text
               style={[
                 styles.tabText,
-                activeTab === 'Info' &&
-                styles.activeTabText
+                activeTab === 'Info' && styles.tabTextActive,
               ]}
             >
-              Info
+              👤 Info
             </Text>
 
           </TouchableOpacity>
 
 
-          {/* TAB SKILLS */}
-
           <TouchableOpacity
             style={[
               styles.tabButton,
-              activeTab === 'Skills' &&
-              styles.activeTab
+              activeTab === 'Skills' && styles.tabButtonActive,
             ]}
             onPress={() => setActiveTab('Skills')}
+            activeOpacity={0.8}
           >
 
             <Text
               style={[
                 styles.tabText,
-                activeTab === 'Skills' &&
-                styles.activeTabText
+                activeTab === 'Skills' && styles.tabTextActive,
               ]}
             >
-              Skills
+              🛠️ Skills
             </Text>
 
           </TouchableOpacity>
 
 
-          {/* TAB KONTAK */}
-
           <TouchableOpacity
             style={[
               styles.tabButton,
-              activeTab === 'Kontak' &&
-              styles.activeTab
+              activeTab === 'Kontak' && styles.tabButtonActive,
             ]}
             onPress={() => setActiveTab('Kontak')}
+            activeOpacity={0.8}
           >
 
             <Text
               style={[
                 styles.tabText,
-                activeTab === 'Kontak' &&
-                styles.activeTabText
+                activeTab === 'Kontak' && styles.tabTextActive,
               ]}
             >
-              Kontak
+              ✉️ Kontak
             </Text>
 
           </TouchableOpacity>
 
         </View>
 
-
         {/* ==================================================
-            TAB INFO
+            SCROLLVIEW
         ================================================== */}
 
-        {activeTab === 'Info' && (
+        <ScrollView
+          style={styles.scroll}
+          showsVerticalScrollIndicator={false}
+          keyboardShouldPersistTaps="handled"
+        >
 
-          <View>
+          {/* ==================================================
+              TAB INFO
+          ================================================== */}
 
-            {/* INFORMASI PRIBADI */}
+          {activeTab === 'Info' && (
 
-            <View style={styles.card}>
+            <>
 
-              <Text style={styles.sectionTitle}>
-                📌 Informasi Pribadi
-              </Text>
+              {/* ==================================================
+                  SECTION PROFILE
+              ================================================== */}
 
+              <View style={styles.profileSection}>
 
-              <Text style={styles.info}>
-                👤 {PROFILE.name}
-              </Text>
+                {/* ==================================================
+                    3. Image
+                    POIN 6 - Animated API
+                ================================================== */}
 
+                <Animated.View
+                  style={[
+                    styles.avatarContainer,
+                    {
+                      transform: [
+                        {
+                          scale: avatarScale,
+                        },
+                      ],
+                    },
+                  ]}
+                >
 
-              <Text style={styles.info}>
-                🎓 {PROFILE.title}
-              </Text>
+                  <Image
+                    source={PROFILE.avatar
+                      ? { uri: PROFILE.avatar }
+                      : PROFILE.avatarOffline
+                    }
+                    style={styles.avatar}
+                    resizeMode="cover"
+                  />
 
-
-              <Text style={styles.info}>
-                📧 {PROFILE.email}
-              </Text>
-
-
-              <Text style={styles.info}>
-                📱 {PROFILE.phone}
-              </Text>
-
-
-              <Text style={styles.info}>
-                📍 {PROFILE.location}
-              </Text>
-
-            </View>
-
-
-            {/* PENDIDIKAN & PENGALAMAN */}
-
-            <View style={styles.card}>
-
-              <Text style={styles.sectionTitle}>
-                📚 Pendidikan & Pengalaman
-              </Text>
+                </Animated.View>
 
 
-              <SectionList
+                {/* Conditional rendering Open to Work */}
 
-                sections={SECTIONS}
+                {openToWork && (
 
-                keyExtractor={(item) => item.id}
+                  <View style={styles.badge}>
 
-                renderSectionHeader={({ section }) => (
+                    <Text style={styles.badgeText}>
+                      ✅ Open to Work
+                    </Text>
 
-                  <Text style={styles.subTitle}>
-                    {section.title}
-                  </Text>
+                  </View>
 
                 )}
 
+
+                {/* 2. Text */}
+
+                <Text style={styles.profileName}>
+                  {PROFILE.name}
+                </Text>
+
+                <Text style={styles.profileTitle}>
+                  {PROFILE.title}
+                </Text>
+
+                <Text style={styles.profileBio}>
+                  {PROFILE.bio}
+                </Text>
+
+
+                {/* Info kontak horizontal */}
+
+                <View style={styles.contactRow}>
+
+                  <Text style={styles.contactItem}>
+                    📧 {PROFILE.email}
+                  </Text>
+
+                  <Text style={styles.contactItem}>
+                    📍 {PROFILE.location}
+                  </Text>
+
+                </View>
+
+                <Text style={styles.contactItem}>
+                  📱 {PROFILE.phone}
+                </Text>
+
+
+                {/* ==================================================
+                    SOCIAL MEDIA
+                    9. TouchableOpacity
+                ================================================== */}
+
+                <View style={styles.socialRow}>
+
+                  {SOCIAL.map((s) => (
+
+                    <TouchableOpacity
+                      key={s.id}
+                      style={styles.socialBtn}
+                      onPress={() =>
+                        Alert.alert(
+                          '🔗 Link',
+                          s.url
+                        )
+                      }
+                      activeOpacity={0.8}
+                    >
+
+                      <Text style={styles.socialIcon}>
+                        {s.icon}
+                      </Text>
+
+                      <Text style={styles.socialLabel}>
+                        {s.label}
+                      </Text>
+
+                    </TouchableOpacity>
+
+                  ))}
+
+                </View>
+
+
+                {/* ==================================================
+                    10. Pressable
+                    Tombol Download CV
+                ================================================== */}
+
+                <Pressable
+                  style={({ pressed }) => [
+                    styles.downloadBtn,
+                    pressed &&
+                      styles.downloadBtnPressed,
+                  ]}
+                  onPressIn={() => setPressing(true)}
+                  onPressOut={() => setPressing(false)}
+                  onPress={() =>
+                    Alert.alert(
+                      '⬇️ Download',
+                      'CV sedang diunduh...'
+                    )
+                  }
+                >
+
+                  <Text style={styles.downloadBtnText}>
+
+                    {pressing
+                      ? '⏳ Mengunduh...'
+                      : '⬇️ Download CV (PDF)'}
+
+                  </Text>
+
+                </Pressable>
+
+              </View>
+
+
+              {/* ==================================================
+                  RIWAYAT
+                  SectionList
+              ================================================== */}
+
+              <View style={styles.sectionBox}>
+
+                <Text style={styles.sectionTitle}>
+                  📋 Riwayat
+                </Text>
+
+                <Text style={styles.sectionSubtitle}>
+                  ↳ SectionList: data dikelompokkan per kategori.
+                  Ketuk kartu untuk Modal detail.
+                </Text>
+
+
+                {/* 6. SectionList */}
+
+                <SectionList
+                  sections={SECTIONS}
+                  keyExtractor={(item) => item.id}
+
+                  renderItem={({ item }) => (
+
+                    <TimelineCard
+                      item={item}
+                      onPress={handleCardPress}
+                    />
+
+                  )}
+
+                  renderSectionHeader={({
+                    section: { title },
+                  }) => (
+
+                    <View style={styles.sectionHeader}>
+
+                      <Text style={styles.sectionHeaderText}>
+                        {title}
+                      </Text>
+
+                    </View>
+
+                  )}
+
+                  scrollEnabled={false}
+
+                  ItemSeparatorComponent={() => (
+                    <View
+                      style={{ height: 10 }}
+                    />
+                  )}
+
+                  SectionSeparatorComponent={() => (
+                    <View
+                      style={{ height: 16 }}
+                    />
+                  )}
+
+                />
+
+              </View>
+
+            </>
+
+          )}
+
+
+          {/* ==================================================
+              TAB SKILLS
+          ================================================== */}
+
+          {activeTab === 'Skills' && (
+
+            <View style={styles.sectionBox}>
+
+              <Text style={styles.sectionTitle}>
+                🛠️ Keahlian
+              </Text>
+
+              <Text style={styles.sectionSubtitle}>
+                ↳ FlatList: menampilkan list data secara efisien
+              </Text>
+
+
+              {/* 5. FlatList */}
+
+              <FlatList
+                data={SKILLS}
+                keyExtractor={(item) => item.id}
+
                 renderItem={({ item }) => (
-
-                  <TimelineCard
-                    item={item}
-                    onPress={handleCardPress}
-                  />
-
+                  <SkillCard item={item} />
                 )}
 
                 scrollEnabled={false}
+
+                ItemSeparatorComponent={() => (
+                  <View style={{ height: 8 }} />
+                )}
 
               />
 
             </View>
 
-          </View>
-
-        )}
+          )}
 
 
-        {/* ==================================================
-            TAB SKILLS
-        ================================================== */}
+          {/* ==================================================
+              TAB KONTAK
+              POIN 4 - KeyboardAvoidingView
+          ================================================== */}
 
-        {activeTab === 'Skills' && (
+          {activeTab === 'Kontak' && (
 
-          <View style={styles.card}>
-
-            <Text style={styles.sectionTitle}>
-              🛠️ Skills
-            </Text>
-
-
-            <Text style={styles.skillDescription}>
-              Beberapa kemampuan yang sedang dipelajari
-              dan dikembangkan.
-            </Text>
-
-
-            <FlatList
-
-              data={SKILLS}
-
-              keyExtractor={(item) => item.id}
-
-              renderItem={({ item }) => (
-                <SkillCard item={item} />
-              )}
-
-              scrollEnabled={false}
-
-            />
-
-          </View>
-
-        )}
-
-
-        {/* ==================================================
-            TAB KONTAK
-        ================================================== */}
-
-        {activeTab === 'Kontak' && (
-
-          <KeyboardAvoidingView
-
-            behavior={
-              Platform.OS === 'ios'
-                ? 'padding'
-                : 'height'
-            }
-
-          >
-
-            {/* ==================================================
-                SOSIAL MEDIA
-            ================================================== */}
-
-            <View style={styles.card}>
-
-              <Text style={styles.sectionTitle}>
-                🌐 Sosial Media
-              </Text>
-
-
-              {SOCIAL.map((item) => (
-
-                <View
-                  key={item.id}
-                  style={styles.socialItem}
-                >
-
-                  <Text style={styles.socialIcon}>
-                    {item.icon}
-                  </Text>
-
-
-                  <View>
-
-                    <Text style={styles.socialLabel}>
-                      {item.label}
-                    </Text>
-
-
-                    <Text style={styles.socialUrl}>
-                      {item.url}
-                    </Text>
-
-                  </View>
-
-                </View>
-
-              ))}
-
-            </View>
-
-
-            {/* ==================================================
-                FORM KONTAK
-            ================================================== */}
-
-            <View style={styles.card}>
+            <View style={styles.sectionBox}>
 
               <Text style={styles.sectionTitle}>
                 ✉️ Hubungi Saya
               </Text>
 
+              <Text style={styles.sectionSubtitle}>
+                ↳ TextInput, Button, ActivityIndicator
+              </Text>
+
+
+              {/* ==================================================
+                  7. TextInput - Nama
+              ================================================== */}
 
               <TextInput
-                style={styles.input}
+                style={styles.textInput}
                 placeholder="Nama Anda"
+                placeholderTextColor="#888"
                 value={senderName}
                 onChangeText={setSenderName}
+                returnKeyType="next"
+                editable={!sending}
               />
 
 
+              {/* ==================================================
+                  7. TextInput - Pesan
+              ================================================== */}
+
               <TextInput
                 style={[
-                  styles.input,
-                  styles.messageInput
+                  styles.textInput,
+                  styles.textArea,
                 ]}
-                placeholder="Tulis pesan..."
+                placeholder="Tulis pesan Anda di sini..."
+                placeholderTextColor="#888"
                 value={message}
                 onChangeText={setMessage}
                 multiline
-                numberOfLines={5}
+                numberOfLines={4}
+                textAlignVertical="top"
+                editable={!sending}
               />
 
 
-              {/* PRESSABLE */}
+              {/* ==================================================
+                  Kondisi loading / tombol kirim
+              ================================================== */}
 
-              <Pressable
+              {sending ? (
 
-                onPress={handleSend}
+                <View style={styles.loadingRow}>
 
-                onPressIn={() =>
-                  setPressing(true)
-                }
-
-                onPressOut={() =>
-                  setPressing(false)
-                }
-
-                style={[
-                  styles.button,
-                  pressing &&
-                  styles.buttonPressed
-                ]}
-
-              >
-
-                {sending ? (
+                  {/* 13. ActivityIndicator */}
 
                   <ActivityIndicator
-                    color="#FFFFFF"
+                    size="large"
+                    color="#7c3aed"
                   />
 
-                ) : (
-
-                  <Text style={styles.buttonText}>
-                    📩 Kirim Pesan
+                  <Text style={styles.loadingText}>
+                    Mengirim pesan...
                   </Text>
 
-                )}
+                </View>
 
-              </Pressable>
+              ) : (
+
+                /* 8. Button */
+
+                <Button
+                  title="✉️ Kirim Pesan"
+                  color="#7c3aed"
+                  onPress={handleSend}
+                />
+
+              )}
 
             </View>
 
-          </KeyboardAvoidingView>
+          )}
 
-        )}
+
+          {/* Jarak bawah */}
+
+          <View style={{ height: 40 }} />
+
+        </ScrollView>
 
 
         {/* ==================================================
-            FOOTER
+            MODAL DETAIL
         ================================================== */}
+        <Modal
+          visible={modalVisible}
+          animationType="slide"
+          transparent
+          onRequestClose={() =>
+            setModalVisible(false)
+          }
+        >
+          {/* Overlay */}
+          <View style={styles.modalOverlay}>
+            {/* Kotak dialog */}
+            <View style={styles.modalBox}>
+              {/* Render hanya jika ada item */}
+              {selectedItem && (
+                <>
+                  <Text style={styles.modalTitle}>
+                    {selectedItem.role}
+                  </Text>
+                  <Text style={styles.modalCompany}>
+                    {selectedItem.company}
+                  </Text>
+                  <Text style={styles.modalPeriod}>
+                    🗓️ {selectedItem.period}
+                  </Text>
+                  <View
+                    style={styles.modalDivider}
+                  />
+                  <Text style={styles.modalDesc}>
+                    {selectedItem.desc}
+                  </Text>
+                </>
+              )}
+              {/* Tombol tutup modal */}
+              <TouchableOpacity
+                style={styles.modalCloseBtn}
+                onPress={() =>
+                  setModalVisible(false)
+                }
+              >
 
-        <View style={styles.footer}>
-
-          <Text style={styles.footerText}>
-            © 2026 {PROFILE.name}
-          </Text>
-
-
-          <Text style={styles.footerSubText}>
-            CV Mobile App • React Native
-          </Text>
-
-        </View>
-
-
-      </ScrollView>
-
-
-      {/* ==================================================
-          MODAL DETAIL
-      ================================================== */}
-
-      <Modal
-
-        visible={modalVisible}
-
-        transparent={true}
-
-        animationType="slide"
-
-        onRequestClose={() =>
-          setModalVisible(false)
-        }
-
-      >
-
-        <View style={styles.modalBackground}>
-
-
-          <View style={styles.modalBox}>
-
-
-            {selectedItem && (
-
-              <>
-
-                <Text style={styles.modalTitle}>
-                  {selectedItem.role}
+                <Text
+                  style={styles.modalCloseBtnText}
+                >
+                  ✕ Tutup
                 </Text>
 
+              </TouchableOpacity>
 
-                <Text style={styles.modalCompany}>
-                  {selectedItem.company}
-                </Text>
-
-
-                <Text style={styles.modalPeriod}>
-                  {selectedItem.period}
-                </Text>
-
-
-                <View style={styles.modalLine} />
-
-
-                <Text style={styles.modalDesc}>
-                  {selectedItem.desc}
-                </Text>
-
-
-                <Button
-
-                  title="Tutup"
-
-                  onPress={() =>
-                    setModalVisible(false)
-                  }
-
-                />
-
-              </>
-
-            )}
+            </View>
 
           </View>
 
-        </View>
+        </Modal>
 
-      </Modal>
+      </SafeAreaView>
 
+    </KeyboardAvoidingView>
 
-    </View>
   );
 }
 
 
 // ==================================================
-// STYLE
+// STYLE SHEET
 // ==================================================
 
 const styles = StyleSheet.create({
 
-  container: {
+  // ==================================================
+  // CONTAINER
+  // ==================================================
+
+  keyboardContainer: {
     flex: 1,
-    backgroundColor: '#F1F5F9'
+  },
+
+  safeArea: {
+    flex: 1,
+    backgroundColor: '#0f172a',
+  },
+
+  scroll: {
+    flex: 1,
+    paddingHorizontal: 16,
   },
 
 
@@ -873,83 +932,30 @@ const styles = StyleSheet.create({
   // HEADER
   // ==================================================
 
-  header: {
-    backgroundColor: '#2563EB',
-    paddingTop: 50,
-    paddingBottom: 25,
-    paddingHorizontal: 20,
-    alignItems: 'center',
-    borderBottomLeftRadius: 25,
-    borderBottomRightRadius: 25
-  },
-
-
-  photoContainer: {
-    width: 110,
-    height: 110,
-    borderRadius: 55,
-    backgroundColor: '#FFFFFF',
-    padding: 4,
-    marginBottom: 15
-  },
-
-
-  photo: {
-    width: '100%',
-    height: '100%',
-    borderRadius: 55
-  },
-
-
-  name: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    textAlign: 'center'
-  },
-
-
-  title: {
-    fontSize: 16,
-    color: '#DBEAFE',
-    marginTop: 5,
-    textAlign: 'center'
-  },
-
-
-  university: {
-    fontSize: 14,
-    color: '#BFDBFE',
-    marginTop: 5,
-    textAlign: 'center'
-  },
-
-
-  bio: {
-    color: '#FFFFFF',
-    textAlign: 'center',
-    marginTop: 10,
-    lineHeight: 20
-  },
-
-
-  // ==================================================
-  // OPEN TO WORK
-  // ==================================================
-
-  workContainer: {
+  headerBar: {
+    backgroundColor: '#1a1a2e',
+    paddingHorizontal: 18,
+    paddingVertical: 14,
     flexDirection: 'row',
     alignItems: 'center',
-    marginTop: 15,
-    backgroundColor: '#FFFFFF',
-    paddingHorizontal: 12,
-    borderRadius: 20
+    justifyContent: 'space-between',
   },
 
+  headerTitle: {
+    color: '#ffffff',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
 
-  workText: {
-    color: '#1E293B',
-    marginRight: 5
+  switchRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+
+  switchLabel: {
+    color: '#ffffff',
+    fontSize: 13,
+    marginRight: 5,
   },
 
 
@@ -959,184 +965,112 @@ const styles = StyleSheet.create({
 
   tabContainer: {
     flexDirection: 'row',
-    backgroundColor: '#FFFFFF',
-    marginHorizontal: 12,
-    marginTop: 12,
-    borderRadius: 12,
-    padding: 4,
-    elevation: 2
+    backgroundColor: '#1e293b',
+    paddingHorizontal: 10,
+    paddingVertical: 8,
+    gap: 8,
   },
-
 
   tabButton: {
     flex: 1,
-    paddingVertical: 11,
+    paddingVertical: 10,
+    borderRadius: 8,
     alignItems: 'center',
-    borderRadius: 9
+    backgroundColor: '#334155',
   },
 
-
-  activeTab: {
-    backgroundColor: '#2563EB'
+  tabButtonActive: {
+    backgroundColor: '#7c3aed',
   },
-
 
   tabText: {
-    fontSize: 14,
+    color: '#cbd5e1',
     fontWeight: '600',
-    color: '#64748B'
-  },
-
-
-  activeTabText: {
-    color: '#FFFFFF'
-  },
-
-
-  // ==================================================
-  // CARD
-  // ==================================================
-
-  card: {
-    backgroundColor: '#FFFFFF',
-    margin: 12,
-    padding: 16,
-    borderRadius: 15,
-    elevation: 2,
-    shadowColor: '#000',
-    shadowOpacity: 0.08,
-    shadowRadius: 4
-  },
-
-
-  sectionTitle: {
-    fontSize: 19,
-    fontWeight: 'bold',
-    color: '#1E293B',
-    marginBottom: 15
-  },
-
-
-  info: {
-    fontSize: 14,
-    color: '#475569',
-    marginBottom: 11
-  },
-
-
-  // ==================================================
-  // SKILL
-  // ==================================================
-
-  skillDescription: {
     fontSize: 13,
-    color: '#64748B',
-    lineHeight: 19,
-    marginBottom: 15
   },
 
-
-  skillCard: {
-    marginBottom: 15
-  },
-
-
-  skillHeader: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    marginBottom: 6
-  },
-
-
-  skillName: {
-    fontSize: 14,
-    fontWeight: 'bold',
-    color: '#334155'
-  },
-
-
-  skillPercent: {
-    fontSize: 13,
-    color: '#64748B'
-  },
-
-
-  progressBg: {
-    height: 8,
-    backgroundColor: '#E2E8F0',
-    borderRadius: 10,
-    overflow: 'hidden'
-  },
-
-
-  progressFill: {
-    height: '100%',
-    borderRadius: 10
+  tabTextActive: {
+    color: '#ffffff',
   },
 
 
   // ==================================================
-  // TIMELINE
+  // PROFILE
   // ==================================================
 
-  subTitle: {
-    fontSize: 16,
-    fontWeight: 'bold',
-    color: '#2563EB',
-    marginBottom: 8,
-    marginTop: 5
+  profileSection: {
+    backgroundColor: '#1e293b',
+    borderRadius: 16,
+    padding: 20,
+    marginTop: 18,
+    alignItems: 'center',
   },
 
-
-  timelineCard: {
-    flexDirection: 'row',
-    backgroundColor: '#F8FAFC',
-    padding: 12,
+  avatarContainer: {
+    width: 125,
+    height: 125,
+    borderRadius: 65,
+    padding: 4,
+    backgroundColor: '#7c3aed',
     marginBottom: 10,
-    borderRadius: 10
   },
 
-
-  timelineDot: {
-    width: 10,
-    height: 10,
-    borderRadius: 5,
-    backgroundColor: '#2563EB',
-    marginTop: 5,
-    marginRight: 10
+  avatar: {
+    width: '100%',
+    height: '100%',
+    borderRadius: 60,
   },
 
-
-  timelineContent: {
-    flex: 1
+  badge: {
+    backgroundColor: '#166534',
+    paddingHorizontal: 14,
+    paddingVertical: 6,
+    borderRadius: 20,
+    marginBottom: 10,
   },
 
-
-  timelineRole: {
-    fontSize: 15,
-    fontWeight: 'bold',
-    color: '#1E293B'
-  },
-
-
-  timelineCompany: {
-    fontSize: 13,
-    color: '#475569',
-    marginTop: 3
-  },
-
-
-  timelinePeriod: {
+  badgeText: {
+    color: '#dcfce7',
     fontSize: 12,
-    color: '#2563EB',
-    marginTop: 3
+    fontWeight: 'bold',
   },
 
+  profileName: {
+    color: '#ffffff',
+    fontSize: 23,
+    fontWeight: 'bold',
+    textAlign: 'center',
+    marginTop: 5,
+  },
 
-  timelineHint: {
-    fontSize: 11,
-    color: '#94A3B8',
-    marginTop: 5
+  profileTitle: {
+    color: '#a78bfa',
+    fontSize: 15,
+    fontWeight: '600',
+    marginTop: 5,
+    textAlign: 'center',
+  },
+
+  profileBio: {
+    color: '#cbd5e1',
+    fontSize: 14,
+    textAlign: 'center',
+    lineHeight: 21,
+    marginTop: 10,
+  },
+
+  contactRow: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+    flexWrap: 'wrap',
+    marginTop: 15,
+  },
+
+  contactItem: {
+    color: '#cbd5e1',
+    fontSize: 12,
+    marginHorizontal: 6,
+    marginVertical: 3,
   },
 
 
@@ -1144,99 +1078,222 @@ const styles = StyleSheet.create({
   // SOCIAL MEDIA
   // ==================================================
 
-  socialItem: {
+  socialRow: {
     flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#F8FAFC',
-    padding: 12,
-    marginBottom: 8,
-    borderRadius: 10
+    marginTop: 15,
+    gap: 8,
   },
 
+  socialBtn: {
+    backgroundColor: '#334155',
+    paddingHorizontal: 12,
+    paddingVertical: 9,
+    borderRadius: 10,
+    alignItems: 'center',
+  },
 
   socialIcon: {
-    fontSize: 25,
-    marginRight: 12
+    fontSize: 18,
   },
-
 
   socialLabel: {
-    fontWeight: 'bold',
-    color: '#1E293B'
-  },
-
-
-  socialUrl: {
-    fontSize: 12,
-    color: '#64748B',
-    marginTop: 3
-  },
-
-
-  // ==================================================
-  // FORM INPUT
-  // ==================================================
-
-  input: {
-    borderWidth: 1,
-    borderColor: '#CBD5E1',
-    borderRadius: 10,
-    padding: 12,
-    marginBottom: 10,
-    fontSize: 14,
-    backgroundColor: '#FFFFFF'
-  },
-
-
-  messageInput: {
-    height: 100,
-    textAlignVertical: 'top'
-  },
-
-
-  // ==================================================
-  // BUTTON
-  // ==================================================
-
-  button: {
-    backgroundColor: '#2563EB',
-    padding: 14,
-    borderRadius: 10,
-    alignItems: 'center'
-  },
-
-
-  buttonPressed: {
-    backgroundColor: '#1D4ED8'
-  },
-
-
-  buttonText: {
-    color: '#FFFFFF',
-    fontWeight: 'bold'
-  },
-
-
-  // ==================================================
-  // FOOTER
-  // ==================================================
-
-  footer: {
-    alignItems: 'center',
-    paddingVertical: 20
-  },
-
-
-  footerText: {
-    color: '#64748B',
-    fontSize: 12
-  },
-
-
-  footerSubText: {
-    color: '#94A3B8',
+    color: '#ffffff',
     fontSize: 11,
-    marginTop: 4
+    marginTop: 2,
+  },
+
+
+  // ==================================================
+  // DOWNLOAD BUTTON
+  // ==================================================
+
+  downloadBtn: {
+    backgroundColor: '#7c3aed',
+    paddingVertical: 12,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginTop: 16,
+  },
+
+  downloadBtnPressed: {
+    opacity: 0.6,
+    transform: [
+      {
+        scale: 0.97,
+      },
+    ],
+  },
+
+  downloadBtnText: {
+    color: '#ffffff',
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
+
+
+  // ==================================================
+  // SECTION
+  // ==================================================
+
+  sectionBox: {
+    backgroundColor: '#1e293b',
+    borderRadius: 16,
+    padding: 16,
+    marginTop: 18,
+  },
+
+  sectionTitle: {
+    color: '#ffffff',
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+
+  sectionSubtitle: {
+    color: '#94a3b8',
+    fontSize: 12,
+    lineHeight: 18,
+    marginBottom: 12,
+  },
+
+  sectionHeader: {
+    backgroundColor: '#334155',
+    paddingVertical: 8,
+    paddingHorizontal: 10,
+    borderRadius: 8,
+    marginTop: 4,
+  },
+
+  sectionHeaderText: {
+    color: '#c4b5fd',
+    fontSize: 14,
+    fontWeight: 'bold',
+  },
+
+
+  // ==================================================
+  // SKILL CARD
+  // ==================================================
+
+  skillCard: {
+    backgroundColor: '#0f172a',
+    padding: 13,
+    borderRadius: 10,
+  },
+
+  skillHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+
+  skillName: {
+    color: '#ffffff',
+    fontSize: 14,
+    fontWeight: '600',
+  },
+
+  skillPercent: {
+    color: '#94a3b8',
+    fontSize: 12,
+  },
+
+  progressBg: {
+    height: 8,
+    backgroundColor: '#334155',
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+
+  progressFill: {
+    height: '100%',
+    borderRadius: 10,
+  },
+
+
+  // ==================================================
+  // TIMELINE
+  // ==================================================
+
+  timelineCard: {
+    backgroundColor: '#0f172a',
+    borderRadius: 12,
+    padding: 14,
+    flexDirection: 'row',
+    alignItems: 'flex-start',
+  },
+
+  timelineDot: {
+    width: 12,
+    height: 12,
+    borderRadius: 10,
+    backgroundColor: '#7c3aed',
+    marginTop: 5,
+    marginRight: 12,
+  },
+
+  timelineContent: {
+    flex: 1,
+  },
+
+  timelineRole: {
+    color: '#ffffff',
+    fontSize: 15,
+    fontWeight: 'bold',
+  },
+
+  timelineCompany: {
+    color: '#a78bfa',
+    fontSize: 13,
+    marginTop: 4,
+  },
+
+  timelinePeriod: {
+    color: '#94a3b8',
+    fontSize: 12,
+    marginTop: 4,
+  },
+
+  timelineHint: {
+    color: '#64748b',
+    fontSize: 11,
+    marginTop: 8,
+  },
+
+
+  // ==================================================
+  // TEXT INPUT
+  // ==================================================
+
+  textInput: {
+    backgroundColor: '#0f172a',
+    color: '#ffffff',
+    borderWidth: 1,
+    borderColor: '#475569',
+    borderRadius: 10,
+    paddingHorizontal: 12,
+    paddingVertical: 11,
+    marginBottom: 12,
+    fontSize: 14,
+  },
+
+  textArea: {
+    minHeight: 110,
+    paddingTop: 12,
+  },
+
+  loadingRow: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 10,
+  },
+
+  loadingText: {
+    color: '#cbd5e1',
+    marginLeft: 10,
+    fontSize: 14,
   },
 
 
@@ -1244,54 +1301,63 @@ const styles = StyleSheet.create({
   // MODAL
   // ==================================================
 
-  modalBackground: {
+  modalOverlay: {
     flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.5)',
-    justifyContent: 'flex-end'
+    backgroundColor: 'rgba(0,0,0,0.7)',
+    justifyContent: 'flex-end',
   },
-
 
   modalBox: {
-    backgroundColor: '#FFFFFF',
-    padding: 25,
-    borderTopLeftRadius: 20,
-    borderTopRightRadius: 20
+    backgroundColor: '#1e293b',
+    borderTopLeftRadius: 22,
+    borderTopRightRadius: 22,
+    padding: 22,
+    minHeight: 280,
   },
-
 
   modalTitle: {
-    fontSize: 20,
+    color: '#ffffff',
+    fontSize: 21,
     fontWeight: 'bold',
-    color: '#1E293B'
   },
-
 
   modalCompany: {
-    fontSize: 14,
-    color: '#475569',
-    marginTop: 5
+    color: '#a78bfa',
+    fontSize: 15,
+    marginTop: 6,
   },
-
 
   modalPeriod: {
+    color: '#94a3b8',
     fontSize: 13,
-    color: '#2563EB',
-    marginTop: 5
+    marginTop: 8,
   },
 
-
-  modalLine: {
+  modalDivider: {
     height: 1,
-    backgroundColor: '#E2E8F0',
-    marginVertical: 15
+    backgroundColor: '#475569',
+    marginVertical: 15,
   },
-
 
   modalDesc: {
+    color: '#cbd5e1',
     fontSize: 14,
-    lineHeight: 21,
-    color: '#475569',
-    marginBottom: 15
-  }
+    lineHeight: 22,
+  },
+
+  modalCloseBtn: {
+    backgroundColor: '#7c3aed',
+    paddingVertical: 12,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginTop: 22,
+  },
+
+  modalCloseBtnText: {
+    color: '#ffffff',
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
 
 });
+```
